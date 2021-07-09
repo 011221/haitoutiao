@@ -1,10 +1,11 @@
 <template>
   <div class="home">
 
-<van-nav-bar fixed placeholder >
-	
-	<van-button slot="title" class="search-btn" icon="search" type="info" round size="small" to="/search">搜索</van-button>
-	
+<van-nav-bar :fixed="true" class="aaa">
+	  <template #title>
+           <div class="search-btn">
+		   </div>
+	  </template>
 </van-nav-bar>
 
 
@@ -20,6 +21,7 @@ export default {
   name: 'Home',
   data(){
 	return{
+		value:'1'
 	}  
   },
   components: {
@@ -27,16 +29,20 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped="scoped">
->>>.van-nav-bar{
-  background-color: #f00!important;
+<style lang="scss" scoped>
+.van-nav-bar{
+  background-color: $color;
+  ::v-deep .van-nav-bar__title{
+  	width: 100%;
+  }
 }
 
   .search-btn {
-    width: 277px;
+    width: 100%;
     height: 32px;
     background: #66d79d;
     border: none;
+	border-radius: 32px;
     .van-icon {
       font-size: 16px;
     }
