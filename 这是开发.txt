@@ -1,0 +1,12 @@
+覆盖vant  样式方案  
+再建个css
+
+<style scoped="scoped" lang="scss">
+	.van-nav-bar{
+	  background-color: $color;
+	 ::v-deep .van-nav-bar__title{
+	 		  max-width: 278px;
+			  width: 278px;
+	 }
+	}
+</style>

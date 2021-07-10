@@ -6,6 +6,7 @@
 </template>
 
 <style lang="scss">
+	@import 'http://at.alicdn.com/t/font_2660854_qfx7tck4jva.css';
 	
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
