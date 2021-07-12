@@ -1,39 +1,73 @@
 <template>
 	<div class="home">
-		<van-nav-bar class="aaa">
-			<template #title>
+		<commonHeader>
+			<template #search>
 				<div class="search-btn">
-					<van-icon class-prefix="icon" size="14" name="sousuo" />
+					<span class="iconfont icon-sousuo"></span>
 					搜索
 				</div>
 			</template>
-		</van-nav-bar>
+		</commonHeader>
 
-		<van-tabs color="#07c160" v-model="cate_index" @change="tab_change">
-			<van-tab  v-for="(item,index) in cate" :title="item.name" :key="item._id"> 
-			</van-tab>
-		</van-tabs>
+<div class="home_tabs">
+	<van-tabs color="#07c160" >
+		<van-tab  title="本地头条"></van-tab>
+		<van-tab  title="招聘求职"></van-tab>
+		<van-tab  title="二手置换"></van-tab>
+		<van-tab  title="房屋出租"></van-tab>
+		<van-tab  title="生意转让"></van-tab>
+		<van-tab  title="婚恋交友"></van-tab>
+	</van-tabs>
+</div>
+<div class="container" style="padding-bottom: 50px;padding-top: 90px;background: #fff;">
+	
+
 		
 		<van-list
 		  v-model="loading"
 		  :finished="finished"
 		  finished-text="没有更多了"
-		  @load="get_list"
 		  :immediate-check="false"
 		>
 		  <div class="article_list" >
-			  <div class="list_item" v-for="(item,index) in list" :key="index">
+			  <div class="list_item">
 				  <div class="title">
-				  {{item.title}}
+				 三次出演陈独秀，于和伟是如何打破事不过三的魔咒的？
 				  </div>
-				  <div class="img_wrap_type1" v-if="item.poster_type==2">
-					  <img :src="item.imageSrc[0]" alt="">
+				  <div class="img_type1" >
+					  <img src="~@/assets/1.jpg" >
+				  </div>
+				  
+				  
+				  <div class="aricle_bottom">
+					  <span>小张</span>   <span>2评论</span> <span>2021-07-11</span>
 				  </div>
 			  </div>
-		 
+		  </div>
 		  
+		  <div class="article_list" >
+		  			  <div class="list_item">
+		  				  <div class="title">
+		  				 三次出演陈独秀，于和伟是如何打破事不过三的魔咒的？
+		  				  </div>
+		  				  <div class="img_type2" >
+		  					  <img src="~@/assets/1.jpg" >
+		  					  <img src="~@/assets/1.jpg" >
+		  					  <img src="~@/assets/1.jpg" >
+		  					  <img src="~@/assets/1.jpg" >
+		  				  </div>
+		  				  
+		  				  
+		  				  <div class="aricle_bottom">
+		  					  <span>小张</span>   <span>2评论</span> <span>2021-07-11</span>
+		  				  </div>
+		  			  </div>
 		  </div>
 		</van-list>
+	
+	
+</div>
+
 		
 	</div>
 </template>
@@ -44,76 +78,27 @@
 export default {
 	name: 'Home',
 	data() {
-		let cate = localStorage.getItem('toutiao_cate');
+		
 		return {
-			 cate: cate? JSON.parse(cate):[],
+			 cate:[],
 			 cate_index:0,
 			 list: [],
-		     loading: true,
-		     finished: false,
-			 skip:0,
-			 limit:10
+		     loading: true, //加载
+		     finished: false //完成
 		};
 	},
-	components: {},
 	mounted() {
-		this.get_cate_list()
+	
 	},
 	methods:{
 		
-		get_cate_list(){
-			this.$http.post('/api/get_cate_list')
-			.then(res=>{
-				console.log(res)
-				if(res.code==0){
-					this.cate = res.data;
-					
-					localStorage.setItem('toutiao_cate',JSON.stringify(res.data))
-					
-					this.get_list()
-				}else{
-					  this.$toast('获取失败');
-				}
-			})
-		},
-		tab_change(e){
-			
-			this.cate_index = e;
-			
-			
-			
-		},
-		get_list(){
-			
-			let {cate_index,cate,skip,limit} = this;
-			let cate_id = cate[cate_index]._id;
-			this.$http.post('/api/get_article_list',{
-				cate_id,
-				skip,
-				limit
-			}).then(res=>{
-				console.log(res)
-				this.list = res.data;
-			}).catch(err=>{
-				
-				console.log(err)
-			})
-			
-			
-		}
+
 		
 	}
 };
 </script>
 
 <style scoped="scoped" lang="scss">
-.van-nav-bar {
-	background-color: $color;
-	::v-deep .van-nav-bar__title {
-		max-width: 278px;
-		width: 278px;
-	}
-}
 .van-tabs--line ::v-deep .van-tabs__wrap {
 	@include border;
 }
@@ -123,8 +108,12 @@ export default {
 </style>
 
 <style lang="scss">
+	
 .search-btn {
-	width: 100%;
+	width: 70%;
+	position: absolute;
+	top: 6px;
+	left: 15%;
 	height: 32px;
 	background: #66d79d;
 	border: none;
@@ -134,27 +123,58 @@ export default {
 	align-items: center;
 	color: #fff;
 	font-size: 14px;
-	.icon {
+	.iconfont {
 		margin-right: 5px;
+		font-size: 16px;
 	}
 }
-
+.home_tabs{
+	width: 100%;
+	height: 44px; 
+	 position: fixed;
+	 top: 46px;
+	 z-index: 999;
+}
 .article_list{
-	padding:  20px;
-	@include border;
-	margin-top: 10px;
-	
+	padding:  0 20px;
 	.list_item{
 		width: 100%;
+		padding: 12px 0 0 0;
+		.title{
+			margin: 0 0 10px 0;
+		}
 		
 	}
-	.img_wrap_type1{
-		
+	.img_type1{
+		width: 100%;
+		height: 210px;
 		img{
-			width: 710px;
-			height: 350px;
+			width: 100%;
+			height: 210px;
 		}
 	}
+	.img_type2{
+		width: 100%;
+		height: 75px;
+		display: flex;
+		overflow: hidden;
+		img{
+			width: 32%;
+			margin-right: 2%;
+		}
+	}
+	
+	.aricle_bottom{
+		display: flex;
+		height: 40px;
+		align-items: center;
+		color: #888;
+		@include border;
+		font-size: 14px;
+		span{
+			margin-right: 20px;
+		}
+		}
 	
 }
 

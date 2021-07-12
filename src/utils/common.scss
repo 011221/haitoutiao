@@ -3,3 +3,4 @@ $color:#07c160;
 @mixin border($color:#eee,$arrow:bottom) {  
 	border-#{$arrow}: 1px solid $color;
 }
+
