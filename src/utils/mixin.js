@@ -29,16 +29,15 @@ const mixin = {
 	
 	data(){
 		return {
-			
 		}
 	},
 	methods:{
-
+      $date
 	},
 	filters:{
-		formatTime(d=''){
+		formatTime(d='',format='Y-m-d H:i:s'){
 			if(!d) return ''
-			return $date(d,'Y-m-d H:i:s')
+			return $date(d,format)
 		}
 	}
 	

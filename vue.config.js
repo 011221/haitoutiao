@@ -1,5 +1,6 @@
 // vue.config.js
 module.exports = {
+	publicPath:process.env.NODE_ENV==='production'?'./':'/',
   css: {
     loaderOptions: {
       // 给 sass-loader 传递选项
@@ -13,5 +14,18 @@ module.exports = {
       },
 
     }
+  },
+  devServer:{
+  	proxy:{
+  		 "/api":{
+  			target:"https://1ef2a05f-0d49-4c7a-88e5-d09968b0bed8.bspapp.com/http",
+  			 changeOrigin:true,
+  			 ws:true,
+  			 pathRewrite:{
+  				  "^/api":""
+  			 } 
+  		 }
+  	}
   }
+
 }

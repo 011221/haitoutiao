@@ -3,7 +3,7 @@
 		<!-- 导航栏 -->
 		<commonHeader>
 			<template #title>
-				<div class="title">注册</div>
+				<div class="title">重置</div>
 			</template>
 			<template #back>
 				<div class="back" @click="$router.back()"><span class="iconfont icon-fanhui"></span></div>
@@ -15,7 +15,7 @@
 			@submit="submit"
 			@failed="onFailed">
 				<van-field center placeholder="请输入手机号" 
-				name="username" 
+				name="username" maxlength="11"
 				 :rules="[{ pattern:/^1[3-9]\d{9}$/, message: '请输入正确的手机号' }]"
 				v-model="username">
 					<template #left-icon>
@@ -40,7 +40,7 @@
 				</van-field>
 				
 				
-				<van-field center placeholder="请输入密码" name="password"
+				<van-field center placeholder="请输入新密码" name="password"
 				:rules="[{ pattern:/^\w{6,12}$/, message: '密码格式错误'}]"
 				type="password" v-model="password" >
 					<template #left-icon>
@@ -75,36 +75,18 @@
 				//   两种你都得会  
 				console.log(e)
 				
-				this.$http.post('/user/reg',e)
+				this.$http.post('/user/forget',e)
 				.then(res=>{
 					console.log(res)
 					if(res.code==0){
 						//页面返回
-						
-						let {token,tokenExpired,userInfo,uid}=res
-						localStorage.setItem("token",token)
-						localStorage.setItem("tokenExpired",tokenExpired)
-						localStorage.setItem("uid",uid)
-						//防止刷新数据丢失
-						sessionStorage.setItem("userInfo",JSON.stringify(userInfo))
-						//数据存到变量中，判断这个变量   ——vuex
-						
-						this.$store.commit('CHANGE_DATA',{name:'token',val:token})
-						this.$store.commit('CHANGE_DATA',{name:'uid',val:uid})
-						this.$store.commit('CHANGE_DATA',{name:'userInfo',val:userInfo})
 						setTimeout(e=>{
-							this.$router.back(2)
+							this.$toast.success('修改成功')
+							this.$router.back()
 						},1000)
-						
-						
 					}else{
-						this.$toast(res.msg||"注册失败")
+						this.$toast(res.msg||"修改失败")
 					}
-					
-					
-					
-					
-					
 				}).catch(err=>{
 					console.log(err)
 				})
@@ -125,10 +107,8 @@
 				}
 				//让按钮不可点击
 				this.disabled=true
-				
 				this.$http.post('/user/sendSms',{
-					type:"register",
-					mobile:username
+					type:'login',mobile:username
 				}).then(res=>{
 					console.log(res)
 					if(res.code==0){
@@ -136,7 +116,6 @@
 						//倒计时  60 59 0  不能点击
 						 //再次发送 可以点击
 						 this.$toast("验证码已发送")
-						 
 						 
 						this.msg=time+"s"
 						timer=setInterval(e=>{
@@ -160,9 +139,6 @@
 				}).catch(err=>{
 					this.disabled=false
 				})
-				
-				
-				
 				
 				
 			}

@@ -1,16 +1,24 @@
 <template>
   <div id="app">
-
-    <router-view/>
+	  <!-- keep-alive这种虚拟组件上  不能加  if else-->
+     <keep-alive>  <!-- 缓存返回不会丢失 -->
+          <router-view v-if="$route.meta&&$route.meta.keepAlive"></router-view>
+	 </keep-alive>
+	 <router-view v-if="!($route.meta&&$route.meta.keepAlive)"></router-view>
   </div>
 </template>
 
+<script type="text/javascript">
+
+</script>
 <style lang="scss">
-	@import 'http://at.alicdn.com/t/font_2660854_308ml2lhzfv.css';
-	
+	// @import 'http://at.alicdn.com/t/font_2663462_ikh0zvv36ei.css';
+		@import './assets/fonts/iconfont.css';
+	.iconfont{font-size: 16px;}
 	* {
 		margin: 0;
 		padding: 0;
+		font-size: 14px;
 	}
 	html,
 	body {

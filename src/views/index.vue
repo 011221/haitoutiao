@@ -1,8 +1,9 @@
 <template>
 	<div>
-		<router-view></router-view>
+		<router-view></router-view>  
+		<!-- 这里渲染子路由的组件 -->
 
-		<van-tabbar v-model="active" active-color="#07c160" route>
+		<van-tabbar v-model="active" active-color="#036eb8" route>
 			<van-tabbar-item to="/">
 				<span>首页</span>
 				<template #icon="props">
@@ -12,7 +13,7 @@
 			<van-tabbar-item to="/publish">
 				<span>发布</span>
 				<template #icon="props">
-					<span class="iconfont icon-iconset0186"></span>
+					<span class="iconfont icon-fabu--"></span>
 				</template>
 			</van-tabbar-item>
 			<van-tabbar-item to="/my">

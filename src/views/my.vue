@@ -1,27 +1,28 @@
 <template>
   <div class="container" style="padding-top: 0;">
-    <van-cell-group  class="my-info">
+    <van-cell-group  class="my-info" v-if="is_login">
       <van-cell
         class="base-info"
         center
         :border="false"
+		style="height: 180px;"
       >
         <van-image
           class="avatar"
           slot="icon"
           round
           fit="cover"
-          src=""
+          :src="userInfo.avatar"
         />
-        <div class="name" slot="title">小明</div>
+        <div class="name" slot="title">{{userInfo.nickname||userInfo.username}}</div>
         <van-button
           class="update-btn"
           size="small"
           round
-          to="/user/edit"
+          to="/user_info"
         >编辑资料</van-button>
       </van-cell>
-      <van-grid class="data-info" :border="false" column-num="2">
+      <!-- <van-grid class="data-info" :border="false" column-num="2">
         <van-grid-item class="data-info-item">
           <div slot="text" class="text-wrap">
             <div class="count">1</div>
@@ -34,52 +35,100 @@
             <div class="text">获赞</div>
           </div>
         </van-grid-item>
-      </van-grid>
+      </van-grid> -->
     </van-cell-group>
 
-    <div  class="not-login" style="display: none;">
+    <router-link tag="div" to="/login"  class="not-login" v-else>
       <div >
         <img class="mobile" src="~@/assets/tel.png">
       </div>
       <div class="text">登录 / 注册</div>
-    </div>
+    </router-link>
 
     <van-grid class="nav-grid mb-4" :column-num="2">
 	  
-	    <van-grid-item  class="nav-grid-item">
+	    <router-link tag='van-grid-item' to='/collect'  class="nav-grid-item">
 			
-	     <span class="iconfont icon-shoucang"></span>
+	     <span class="iconfont icon-shoucang2"></span>
 		 <span>收藏</span>
-	    </van-grid-item>
-	    <van-grid-item  class="nav-grid-item">
-			
-	     <span class="iconfont icon-lishi"></span>
-		 <span>历史</span>
-	    </van-grid-item>
+	    </router-link>
+		<router-link tag='van-grid-item' to='/zan'  class="nav-grid-item">
+	     <span class="iconfont icon-dianzan2"></span>
+		 <span>点赞</span>
+	    </router-link>
     </van-grid>
-    <van-cell title="修改密码" is-link to="/" />
-    <van-cell title="联系我们" is-link to="/" />
+    <van-cell title="修改密码" is-link to="/revise" />
+    <van-cell title="联系我们" is-link to="/phone" />
     <van-cell
       class="mb-4"
       title="关于我们"
       is-link
-      to="/"
+      to="/about"
     />
     <van-cell
+	  v-if="is_login" 
       class="logout-cell"
       title="退出登录"
+	  @click='logout'
     />
   </div>
 </template>
 
 <script>
+	//登陆状态维护
+	//判断有没有token，token是否过期，没过期请求用户数据
+	//路由守卫
+	//辅助函数
+	import {mapState,mapMutations} from 'vuex'
+	
+	
+	export default{
+		
+		data(){
+			return{
+			}
+		},
+		computed:{
+			is_login(){
+				return !!this.$store.state.uid  //如果有
+			},
+			// userInfo(){
+			// 	return this.$store.state.userInfo
+			// },
+			...mapState(['userInfo','uid'])
+		},
+		created(){
+			
+		},
+		methods:{
+			...mapMutations(['LOG_OUT']),
+			logout(){
+				this.$dialog.confirm({
+				  title: '你确定退出登录吗？',
+				  message: '',
+				})
+				  .then(() => {
+				    // on confirm
+					// this.$store.commit('LOG_OUT')
+					this.LOG_OUT()
+				  })
+				  .catch(() => {
+				    // on cancel
+				  });
+			},
+			go(){
+				console.log(4)
+			}
+		}
+		
+	}
 
 </script>
 
 <style  lang="scss">
 .container {
   .my-info {
-     background: url("~@/assets/banner.jpg") no-repeat;
+     background: url("~@/assets/bg01.png") no-repeat;
     background-size: cover;
     .base-info {
       box-sizing: border-box;
@@ -102,6 +151,8 @@
         height: 24px;
         font-size: 12px;
         color: #666666;
+		line-height: 24px;
+		
       }
     }
     .data-info {
@@ -126,10 +177,13 @@
       background-color: unset;
     }
   }
-
+.icon-dianzan2{
+	color: #eb5253;
+	font-weight: bold;
+}
   .not-login {
     height: 180px;
-    background: url("~@/assets/banner.jpg") no-repeat;
+    background: url("~@/assets/bg01.png") no-repeat;
     background-size: cover;
     display: flex;
     flex-direction: column;
@@ -152,8 +206,9 @@
         font-size: 22px;
 		margin-bottom: 5px;
       }
-      .icon-shoucang {
+      .icon-shoucang2 {
         color: #eb5253;
+		font-weight: bold;
       }
       .icon-lishi {
         color: #ff9d1d;

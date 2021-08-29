@@ -2,10 +2,13 @@
 
 import axios from 'axios';
 import Vue from 'vue'
-axios.defaults.baseURL = 'https://d33a5037-6c63-4e92-8bb1-30018ab701ea.bspapp.com/http';
+import config from '@/utils/config.js';
+
+axios.defaults.baseURL = config.baseURL;
 
 axios.interceptors.request.use((config)=>{
-	
+	let token=localStorage.getItem('token')
+	config.headers.token=token
 	return config
 	
 },(err)=>{
@@ -15,7 +18,7 @@ axios.interceptors.request.use((config)=>{
 })
 axios.interceptors.response.use((data)=>{
 	
-	console.log(data.status)
+	// console.log(data.status)
 	
 	if(data&&data.status===200){
 		return data.data
@@ -28,5 +31,6 @@ axios.interceptors.response.use((data)=>{
 	return Promise.reject(err)
 	
 })
+
 
 Vue.prototype.$http = axios;
